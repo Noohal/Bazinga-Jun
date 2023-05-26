@@ -10,7 +10,7 @@
  * @brief All of the operations enumerated.
  */
 enum OperationType {
-    PUSH, PLUS, PRINT
+    PUSH, PLUS, MINUS, PRINT
 };
 
 /**
@@ -53,6 +53,18 @@ int* plus() {
 }
 
 /**
+ * @brief Creates an operation for subtracting two values
+ * 
+ * @return int* An array containing the OperationType and an empty value.
+ */
+int* minus() {
+    int* command = new int[2];
+    command[0] = static_cast<int>(MINUS);
+    command[1] = 0;
+    return command;
+}
+
+/**
  * @brief Creates an operation for printing a value
  * 
  * @return int* An array containing the OperationType and an empty value.
@@ -83,6 +95,8 @@ void create_program_from_file(std::ifstream &aFile) {
                 theProgram.push_back(push(wordAsNum));
             } else if(theWord == "plus") {
                 theProgram.push_back(plus());
+            } else if(theWord == "minus") {
+                theProgram.push_back(minus());
             } else if(theWord == "bazinga") {
                 theProgram.push_back(print());
             } else {
@@ -106,12 +120,18 @@ void simulate_language() {
             auto a = theQueue.back();
             theQueue.pop_back();
             theQueue.push_back(a + b);
+        } else if(*operation == MINUS) {
+            auto b = theQueue.back();
+            theQueue.pop_back();
+            auto a = theQueue.back();
+            theQueue.pop_back();
+            theQueue.push_back(a - b);
         } else if(*operation == PRINT) {
             auto thePop = theQueue.back();
             theQueue.pop_back();
             std::cout << thePop << std::endl;
         } else {
-            std::cout << "Unknown command" << std::endl;
+            std::cout << "Unknown command: " << *operation << std::endl;
         }
     }
 }
