@@ -10,7 +10,7 @@
  * @brief All of the operations enumerated.
  */
 enum OperationType {
-    PUSH, PLUS, MINUS, PRINT
+    PUSH, PLUS, MINUS, MULTIPLY, DIVIDE, PRINT
 };
 
 /**
@@ -65,6 +65,30 @@ int* minus() {
 }
 
 /**
+ * @brief Creates an operation for multiply two values
+ * 
+ * @return int* An array containing the OperationType and an empty value.
+ */
+int* multiply() {
+    int* command = new int[2];
+    command[0] = static_cast<int>(MULTIPLY);
+    command[1] = 0;
+    return command;
+}
+
+/**
+ * @brief Creates an operation for divide two values
+ * 
+ * @return int* An array containing the OperationType and an empty value.
+ */
+int* divide() {
+    int* command = new int[2];
+    command[0] = static_cast<int>(DIVIDE);
+    command[1] = 0;
+    return command;
+}
+
+/**
  * @brief Creates an operation for printing a value
  * 
  * @return int* An array containing the OperationType and an empty value.
@@ -97,6 +121,10 @@ void create_program_from_file(std::ifstream &aFile) {
                 theProgram.push_back(plus());
             } else if(theWord == "minus") {
                 theProgram.push_back(minus());
+            } else if(theWord == "multiply") {
+                theProgram.push_back(multiply());
+            } else if(theWord == "divide") {
+                theProgram.push_back(divide());
             } else if(theWord == "bazinga") {
                 theProgram.push_back(print());
             } else {
@@ -126,6 +154,22 @@ void simulate_language() {
             auto a = theQueue.back();
             theQueue.pop_back();
             theQueue.push_back(a - b);
+        } else if(*operation == MULTIPLY) {
+            auto b = theQueue.back();
+            theQueue.pop_back();
+            auto a = theQueue.back();
+            theQueue.pop_back();
+            theQueue.push_back(a * b);
+        } else if(*operation == DIVIDE) {
+            auto b = theQueue.back();
+            theQueue.pop_back();
+            if(b == 0) {
+                std::cout << "DIVIDE BY ZERO ERROR" << std::endl;
+                return;
+            }
+            auto a = theQueue.back();
+            theQueue.pop_back();
+            theQueue.push_back(a / b);
         } else if(*operation == PRINT) {
             auto thePop = theQueue.back();
             theQueue.pop_back();
