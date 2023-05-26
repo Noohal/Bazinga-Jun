@@ -86,7 +86,7 @@ void create_program_from_file(std::ifstream &aFile) {
             } else if(theWord == "bazinga") {
                 theProgram.push_back(print());
             } else {
-                std::cout << "Unknown word" << std::endl;
+                std::cout << "Unknown word: " << theWord << std::endl;
             }
         }
     }
